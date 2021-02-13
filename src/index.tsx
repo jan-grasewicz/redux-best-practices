@@ -1,11 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './Root'
-import './index.css'
+import { Provider } from 'react-redux'
+import store from './store'
+import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import theme from './theme'
+import Root from './components/Root'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Root />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 )
