@@ -52,7 +52,7 @@ const TodoInput = () => {
     <Paper component='form' className={classes.inputWrap}>
       <InputBase
         className={classes.input}
-        placeholder='Add todo'
+        placeholder='Add Todo'
         value={value}
         onChange={handleChange}
       />
