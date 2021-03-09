@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Box, Container, Typography } from '@material-ui/core'
-import TodoList from './TodoList'
+import TodoListContainer from './TodoListContainer'
 import TodoInput from './TodoInput'
 import { useDispatch } from 'react-redux'
 import { fetchTodos, resetTodos } from '../ducks/todos'
@@ -19,7 +19,7 @@ const Root = () => {
     <Container maxWidth='sm'>
       <Box my={4}>
         <TodoInput />
-        <TodoList />
+        <TodoListContainer />
       </Box>
     </Container>
   )

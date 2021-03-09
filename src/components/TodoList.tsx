@@ -1,65 +1,20 @@
-import React, { useState } from 'react'
-import List from '@material-ui/core/List'
-import { AppBar, Paper, Tab, Tabs } from '@material-ui/core'
+import React from 'react'
+import { createStyles, List, makeStyles, Theme } from '@material-ui/core'
+import { ITodo } from '../ducks/todos'
 import TodoListItem from './TodoListItem'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../store'
-import { ITodo, selectActiveTodos, selectCompletedTodos } from '../ducks/todos'
-import { Filters, selectFilter, setFilter } from '../ducks/filters'
 
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     divider: {},
-//   })
-// )
-// const classes = useStyles()
-
-const renderList = (todos: ITodo[]) => (
-  <List>{!!todos.length && todos.map((todo) => <TodoListItem key={todo.id} {...todo} />)}</List>
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    list: { height: 'calc(100vh - 224px)', minHeight: '192px', overflowY: 'auto' },
+  })
 )
 
-const TodoList = () => {
-  const dispatch = useDispatch()
-
-  const activeFilter = useSelector(selectFilter)
-
-  const allTodos = useSelector((state: RootState) => state.todos)
-  const completedTodos = useSelector(selectCompletedTodos)
-  const activeTodos = useSelector(selectActiveTodos)
-
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: Filters) => {
-    dispatch(setFilter(newValue))
-  }
-
-  const tabsArray = [
-    { label: 'Completed', filter: Filters.SHOW_COMPLETED },
-    { label: 'All', filter: Filters.SHOW_ALL },
-    { label: 'Active', filter: Filters.SHOW_ACTIVE },
-  ]
-
+const TodoList: React.FC<{ todos: ITodo[] }> = ({ todos }) => {
+  const classes = useStyles()
   return (
-    <Paper>
-      <AppBar position='static' color='default' elevation={0}>
-        <Tabs
-          value={activeFilter}
-          onChange={handleChange}
-          variant='fullWidth'
-          indicatorColor='primary'
-          textColor='primary'
-        >
-          {tabsArray.map(({ label, filter }) => (
-            <Tab label={label} value={filter} />
-          ))}
-        </Tabs>
-      </AppBar>
-      {renderList(
-        activeFilter === Filters.SHOW_ACTIVE
-          ? activeTodos
-          : activeFilter === Filters.SHOW_COMPLETED
-          ? completedTodos
-          : allTodos
-      )}
-    </Paper>
+    <List className={classes.list}>
+      {!!todos.length && todos.map((todo) => <TodoListItem key={todo.id} {...todo} />)}
+    </List>
   )
 }
 
