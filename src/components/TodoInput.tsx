@@ -43,9 +43,17 @@ const TodoInput = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }
+
   const handleAdd = () => {
     dispatch(addTodo(value))
     setValue(INITIAL_VALUE)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+      e.preventDefault()
+      handleAdd()
+    }
   }
 
   return (
@@ -55,6 +63,7 @@ const TodoInput = () => {
         placeholder='Add Todo'
         value={value}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
       <Divider className={classes.divider} orientation='vertical' />
       <IconButton color='primary' className={classes.iconButton} onClick={handleAdd}>

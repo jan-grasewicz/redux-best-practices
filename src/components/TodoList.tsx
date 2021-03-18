@@ -26,9 +26,6 @@ import { Filters } from '../types'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     list: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
       height: 'calc(100vh - 224px)',
       minHeight: '192px',
       overflowY: 'auto',
@@ -41,7 +38,10 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(6),
     },
     info: {
-      alignSelf: 'center',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   })
 )
