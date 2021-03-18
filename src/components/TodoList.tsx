@@ -10,22 +10,38 @@ import {
   Tab,
   Tabs,
   Theme,
+  Typography,
 } from '@material-ui/core'
 import { RootState } from '../store'
-import { selectActiveTodos, selectCompletedTodos } from '../reducers/todosReducer'
+import {
+  deleteCompletedTodos,
+  resetTodos,
+  selectActiveTodos,
+  selectCompletedTodos,
+} from '../reducers/todosReducer'
 import { selectFilter, setFilter } from '../reducers/filterReducer'
 import TodoListItem from './TodoListItem'
 import { Filters } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    list: { height: 'calc(100vh - 224px)', minHeight: '192px', overflowY: 'auto' },
+    list: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      height: 'calc(100vh - 224px)',
+      minHeight: '192px',
+      overflowY: 'auto',
+    },
     bottomBar: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       alignItems: 'center',
       height: theme.spacing(6),
+    },
+    info: {
+      alignSelf: 'center',
     },
   })
 )
@@ -46,22 +62,22 @@ const TodoList = () => {
       ? completedTodos
       : allTodos
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: Filters) => {
+  const handleFilterChange = (event: React.ChangeEvent<{}>, newValue: Filters) => {
     dispatch(setFilter(newValue))
   }
 
-  const handleDeleteCompleted = () => {
-    console.log('delete completed')
+  const handleDeleteAll = () => {
+    dispatch(resetTodos())
   }
 
-  const handleDeleteAll = () => {
-    console.log('delete all')
+  const handleDeleteCompleted = () => {
+    dispatch(deleteCompletedTodos())
   }
 
   const tabsArray = [
-    { label: 'Completed', filter: Filters.SHOW_COMPLETED },
-    { label: 'All', filter: Filters.SHOW_ALL },
     { label: 'Active', filter: Filters.SHOW_ACTIVE },
+    { label: 'All', filter: Filters.SHOW_ALL },
+    { label: 'Completed', filter: Filters.SHOW_COMPLETED },
   ]
 
   return (
@@ -69,7 +85,7 @@ const TodoList = () => {
       <AppBar position='static' color='default' elevation={0}>
         <Tabs
           value={activeFilter}
-          onChange={handleChange}
+          onChange={handleFilterChange}
           variant='fullWidth'
           indicatorColor='primary'
           textColor='primary'
@@ -81,16 +97,21 @@ const TodoList = () => {
       </AppBar>
 
       <List className={classes.list}>
-        {!!filteredTodos.length &&
-          filteredTodos.map((todo) => <TodoListItem key={todo.id} {...todo} />)}
+        {!filteredTodos.length ? (
+          <Typography className={classes.info} color='textSecondary' variant='subtitle2'>
+            No todos
+          </Typography>
+        ) : (
+          filteredTodos.map((todo) => <TodoListItem key={todo.id} {...todo} />)
+        )}
       </List>
 
       <AppBar className={classes.bottomBar} position='static' color='default' elevation={0}>
-        <Button color='primary' size='small' onClick={handleDeleteCompleted}>
-          Delete Completed
-        </Button>
         <Button color='primary' size='small' onClick={handleDeleteAll}>
           Delete All
+        </Button>
+        <Button color='primary' size='small' onClick={handleDeleteCompleted}>
+          Delete Completed
         </Button>
       </AppBar>
     </Paper>

@@ -2,7 +2,13 @@ import { AppThunk, RootState } from '../store'
 import { ITodo } from '../types'
 
 interface ITodoAction {
-  type: 'todos/add' | 'todos/toggle' | 'todos/set' | 'todos/remove' | 'todos/reset'
+  type:
+    | 'todos/add'
+    | 'todos/toggle'
+    | 'todos/set'
+    | 'todos/delete'
+    | 'todos/reset'
+    | 'todos/deleteCompleted'
   id: number
   title: string
   todos: ITodo[]
@@ -27,8 +33,10 @@ const todosReducer = (state = initialState, action: ITodoAction) => {
       return state.map((todo) =>
         todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
       )
-    case 'todos/remove':
+    case 'todos/delete':
       return state.filter(({ id }) => id !== action.id)
+    case 'todos/deleteCompleted':
+      return state.filter(({ completed }) => !completed)
     case 'todos/reset':
       return initialState
     default:
@@ -60,9 +68,11 @@ export const toggleTodo = (id: number) => ({
 })
 
 export const deleteTodo = (id: number) => ({
-  type: 'todos/remove',
+  type: 'todos/delete',
   id,
 })
+
+export const deleteCompletedTodos = () => ({ type: 'todos/deleteCompleted' })
 
 export const resetTodos = () => ({ type: 'todos/reset' })
 
