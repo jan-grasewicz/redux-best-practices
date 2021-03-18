@@ -1,4 +1,5 @@
 import { AppThunk, RootState } from '../store'
+import { ITodo } from '../types'
 
 interface ITodoAction {
   type: 'todos/add' | 'todos/toggle' | 'todos/set' | 'todos/remove' | 'todos/reset'
@@ -7,15 +8,9 @@ interface ITodoAction {
   todos: ITodo[]
 }
 
-export interface ITodo {
-  id: number
-  title: string
-  completed: boolean
-}
-type IStateTodos = ITodo[]
-const initialState: IStateTodos = []
+const initialState: ITodo[] = []
 
-const todos = (state = initialState, action: ITodoAction) => {
+const todosReducer = (state = initialState, action: ITodoAction) => {
   switch (action.type) {
     case 'todos/set':
       return [...action.todos]
@@ -49,7 +44,9 @@ export const setTodos = (todos: ITodo[]) => {
 }
 
 export const addTodo = (title: string) => {
-  const nextTodoId = Date.now() + Math.floor(Math.random() * Math.pow(10, 8))
+  const nextTodoId = Number(
+    String(Date.now()) + String(Math.floor(Math.random() * Math.pow(10, 5)))
+  )
   return {
     type: 'todos/add',
     id: nextTodoId,
@@ -83,4 +80,4 @@ export const selectCompletedTodos = (rootState: RootState) =>
 export const selectActiveTodos = (rootState: RootState) =>
   rootState.todos.filter(({ completed }) => !completed)
 
-export default todos
+export default todosReducer

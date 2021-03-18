@@ -12,9 +12,10 @@ import {
   Theme,
 } from '@material-ui/core'
 import { RootState } from '../store'
-import { selectActiveTodos, selectCompletedTodos } from '../ducks/todos'
-import { Filters, selectFilter, setFilter } from '../ducks/filters'
+import { selectActiveTodos, selectCompletedTodos } from '../reducers/todosReducer'
+import { selectFilter, setFilter } from '../reducers/filterReducer'
 import TodoListItem from './TodoListItem'
+import { Filters } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

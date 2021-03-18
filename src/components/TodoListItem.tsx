@@ -1,12 +1,13 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import { useDispatch } from 'react-redux'
-import { toggleTodo, ITodo, deleteTodo } from '../ducks/todos'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { toggleTodo, deleteTodo } from '../reducers/todosReducer'
+import { ITodo } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

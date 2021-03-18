@@ -1,13 +1,8 @@
-import { Action, applyMiddleware, combineReducers, createStore } from 'redux'
+import { Action, applyMiddleware, createStore } from 'redux'
 import thunk, { ThunkAction } from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction'
-import todos from './ducks/todos'
-import filters from './ducks/filters'
+import rootReducer from './reducers'
 
-const rootReducer = combineReducers({
-  todos,
-  filters,
-})
 const composeEnhancers = composeWithDevTools({})
 const middleware = [thunk]
 

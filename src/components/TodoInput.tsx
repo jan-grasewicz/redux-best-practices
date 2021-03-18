@@ -10,7 +10,7 @@ import {
   Theme,
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import { addTodo } from '../ducks/todos'
+import { addTodo } from '../reducers/todosReducer'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
