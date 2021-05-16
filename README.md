@@ -174,7 +174,7 @@ because I found this setup in projects much more frequently.
 
   ```typescript
   // store.ts
-  export type RootState = ReturnType<typeof rootReducer>
+  export type RootState = ReturnType<typeof store.getState>
   ```
 
 - ### Use the Redux DevTools Extension for Debugging

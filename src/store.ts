@@ -8,7 +8,7 @@ const middleware = [thunk]
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middleware)))
 
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof store.getState>
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
