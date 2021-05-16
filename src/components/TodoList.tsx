@@ -17,6 +17,7 @@ import {
   deleteCompletedTodos,
   resetTodos,
   selectActiveTodos,
+  selectAllTodos,
   selectCompletedTodos,
 } from '../reducers/todosReducer'
 import { selectFilter, setFilter } from '../reducers/filterReducer'
@@ -52,7 +53,7 @@ const TodoList = () => {
 
   const activeTodos = useSelector(selectActiveTodos)
   const completedTodos = useSelector(selectCompletedTodos)
-  const allTodos = useSelector((state: RootState) => state.todos)
+  const allTodos = useSelector(selectAllTodos)
   const activeFilter = useSelector(selectFilter)
 
   const filteredTodos =

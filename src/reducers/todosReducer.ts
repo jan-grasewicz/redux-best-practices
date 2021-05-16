@@ -84,6 +84,8 @@ export const fetchTodos = (): AppThunk => async (dispatch) => {
     })
 }
 
+export const selectAllTodos = (rootState: RootState) => rootState.todos
+
 export const selectCompletedTodos = (rootState: RootState) =>
   rootState.todos.filter(({ completed }) => completed)
 

@@ -37,16 +37,16 @@ const useStyles = makeStyles((theme: Theme) =>
 const TodoInput = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const INITIAL_VALUE = ''
-  const [value, setValue] = useState(INITIAL_VALUE)
+  const INITIAL_INPUT_VALUE = ''
+  const [inputValue, setInputValue] = useState(INITIAL_INPUT_VALUE)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
+    setInputValue(e.target.value)
   }
 
   const handleAdd = () => {
-    dispatch(addTodo(value))
-    setValue(INITIAL_VALUE)
+    dispatch(addTodo(inputValue))
+    setInputValue(INITIAL_INPUT_VALUE)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -61,7 +61,7 @@ const TodoInput = () => {
       <InputBase
         className={classes.input}
         placeholder='Add Todo'
-        value={value}
+        value={inputValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
