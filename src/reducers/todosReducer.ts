@@ -84,12 +84,15 @@ export const fetchTodos = (): AppThunk => async (dispatch) => {
     })
 }
 
-export const selectAllTodos = (rootState: RootState) => rootState.todos
+export const selectAllTodosIds = (rootState: RootState) => rootState.todos.map(({ id }) => id)
 
-export const selectCompletedTodos = (rootState: RootState) =>
-  rootState.todos.filter(({ completed }) => completed)
+export const selectCompletedTodosIds = (rootState: RootState) =>
+  rootState.todos.filter(({ completed }) => completed).map(({ id }) => id)
 
-export const selectActiveTodos = (rootState: RootState) =>
-  rootState.todos.filter(({ completed }) => !completed)
+export const selectActiveTodosIds = (rootState: RootState) =>
+  rootState.todos.filter(({ completed }) => !completed).map(({ id }) => id)
+
+export const selectTodoById = (id: number) => (rootState: RootState) =>
+  rootState.todos.find((todo) => todo.id === id)!
 
 export default todosReducer

@@ -12,13 +12,12 @@ import {
   Theme,
   Typography,
 } from '@material-ui/core'
-import { RootState } from '../store'
 import {
   deleteCompletedTodos,
   resetTodos,
-  selectActiveTodos,
-  selectAllTodos,
-  selectCompletedTodos,
+  selectActiveTodosIds,
+  selectAllTodosIds,
+  selectCompletedTodosIds,
 } from '../reducers/todosReducer'
 import { selectFilter, setFilter } from '../reducers/filterReducer'
 import TodoListItem from './TodoListItem'
@@ -51,17 +50,17 @@ const TodoList = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const activeTodos = useSelector(selectActiveTodos)
-  const completedTodos = useSelector(selectCompletedTodos)
-  const allTodos = useSelector(selectAllTodos)
+  const allTodosIds = useSelector(selectAllTodosIds)
+  const activeTodosIds = useSelector(selectActiveTodosIds)
+  const completedTodosIds = useSelector(selectCompletedTodosIds)
   const activeFilter = useSelector(selectFilter)
 
-  const filteredTodos =
+  const filteredTodosIds =
     activeFilter === Filters.SHOW_ACTIVE
-      ? activeTodos
+      ? activeTodosIds
       : activeFilter === Filters.SHOW_COMPLETED
-      ? completedTodos
-      : allTodos
+      ? completedTodosIds
+      : allTodosIds
 
   const handleFilterChange = (event: React.ChangeEvent<{}>, newValue: Filters) => {
     dispatch(setFilter(newValue))
@@ -98,12 +97,12 @@ const TodoList = () => {
       </AppBar>
 
       <List className={classes.list}>
-        {!filteredTodos.length ? (
+        {!filteredTodosIds.length ? (
           <Typography className={classes.info} color='textSecondary' variant='subtitle2'>
             No todos
           </Typography>
         ) : (
-          filteredTodos.map((todo) => <TodoListItem key={todo.id} {...todo} />)
+          filteredTodosIds.map((todoId) => <TodoListItem key={todoId} id={todoId} />)
         )}
       </List>
 

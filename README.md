@@ -150,11 +150,10 @@ because I found this setup in projects much more frequently.
 
   Reading data at a more granular level typically leads to better UI performance, as fewer components will need to render when a given piece of state changes.
 
-  <!-- ```typescript
-  // TodoList.tsx
-  ``` -->
-
-  <!-- TODO: use this strategy in TodoList.tsx -->
+  ```typescript
+  // TodoListItem.tsx
+  const { title, completed } = useSelector(selectTodoById(id))
+  ```
 
 - ### Use the Object Shorthand Form of mapDispatch with connect
 - ### Call useSelector Multiple Times in Function Components
@@ -163,9 +162,9 @@ because I found this setup in projects much more frequently.
 
   ```typescript
   // TodoList.tsx
-  const activeTodos = useSelector(selectActiveTodos)
-  const completedTodos = useSelector(selectCompletedTodos)
-  const allTodos = useSelector(selectAllTodos)
+  const allTodosIds = useSelector(selectAllTodosIds)
+  const activeTodosIds = useSelector(selectActiveTodosIds)
+  const completedTodosIds = useSelector(selectCompletedTodosIds)
   const activeFilter = useSelector(selectFilter)
   ```
 

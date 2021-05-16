@@ -1,12 +1,12 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import { toggleTodo, deleteTodo } from '../reducers/todosReducer'
+import { toggleTodo, deleteTodo, selectTodoById } from '../reducers/todosReducer'
 import { ITodo } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -20,11 +20,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const TodoListItem: React.FC<ITodo> = ({ id, title, completed }) => {
+type TodoId = Pick<ITodo, 'id'>
+
+const TodoListItem: React.FC<TodoId> = ({ id }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const { title, completed } = useSelector(selectTodoById(id))
 
-  const handleToggle = (id: number) => () => {
+  const handleToggle = () => {
     dispatch(toggleTodo(id))
   }
   const handleDelete = () => {
@@ -37,7 +40,7 @@ const TodoListItem: React.FC<ITodo> = ({ id, title, completed }) => {
       role={undefined}
       dense
       button
-      onClick={handleToggle(id)}
+      onClick={handleToggle}
       className={classes.listItem}
     >
       <ListItemText
