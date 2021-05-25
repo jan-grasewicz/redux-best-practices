@@ -1,80 +1,114 @@
 import { AppThunk, RootState } from '../store'
 import { ITodo } from '../types'
 
-interface ITodoAction {
-  type:
-    | 'todos/add'
-    | 'todos/toggle'
-    | 'todos/set'
-    | 'todos/delete'
-    | 'todos/reset'
-    | 'todos/deleteCompleted'
-  id: number
-  title: string
+enum TodosTypeKeys {
+  add = 'todos/add',
+  toggle = 'todos/toggle',
+  set = 'todos/set',
+  delete = 'todos/delete',
+  deleteCompleted = 'todos/deleteCompleted',
+  stateReset = 'todos/stateReset',
+}
+
+interface TodosSetAction {
+  type: TodosTypeKeys.set
+  payload: { todos: ITodo[] }
+}
+
+interface TodoAddAction {
+  type: TodosTypeKeys.add
+  payload: { id: number; title: string }
+}
+
+interface TodoToggleAction {
+  type: TodosTypeKeys.toggle
+  payload: { id: number }
+}
+
+interface TodoDeleteAction {
+  type: TodosTypeKeys.delete
+  payload: { id: number }
+}
+
+interface TodosDeleteCompletedAction {
+  type: TodosTypeKeys.deleteCompleted
+}
+
+interface TodosStateResetAction {
+  type: TodosTypeKeys.stateReset
+}
+
+type TodoActionTypes =
+  | TodosSetAction
+  | TodoAddAction
+  | TodoToggleAction
+  | TodoDeleteAction
+  | TodosDeleteCompletedAction
+  | TodosStateResetAction
+
+interface TodosState {
   todos: ITodo[]
 }
 
-const initialState: ITodo[] = []
+const initialState: TodosState = { todos: [] }
 
-const todosReducer = (state = initialState, action: ITodoAction) => {
+const todosReducer = (state = initialState, action: TodoActionTypes) => {
   switch (action.type) {
-    case 'todos/set':
-      return [...action.todos]
-    case 'todos/add':
-      return [
+    case TodosTypeKeys.set:
+      return { ...state, todos: action.payload.todos }
+    case TodosTypeKeys.add:
+      const { id, title } = action.payload
+      return { ...state, todos: [...state.todos, { id, title, completed: false }] }
+    case TodosTypeKeys.toggle:
+      return {
         ...state,
-        {
-          id: action.id,
-          title: action.title,
-          completed: false,
-        },
-      ]
-    case 'todos/toggle':
-      return state.map((todo) =>
-        todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
-      )
-    case 'todos/delete':
-      return state.filter(({ id }) => id !== action.id)
-    case 'todos/deleteCompleted':
-      return state.filter(({ completed }) => !completed)
-    case 'todos/reset':
+        todos: state.todos.map((todo) =>
+          todo.id === action.payload.id ? { ...todo, completed: !todo.completed } : todo
+        ),
+      }
+    case TodosTypeKeys.delete:
+      return { ...state, todos: state.todos.filter(({ id }) => id !== action.payload.id) }
+    case TodosTypeKeys.deleteCompleted:
+      return { ...state, todos: state.todos.filter(({ completed }) => !completed) }
+    case TodosTypeKeys.stateReset:
       return initialState
     default:
       return state
   }
 }
 
-export const setTodos = (todos: ITodo[]) => {
+export const setTodos = (todos: ITodo[]): TodosSetAction => {
   return {
-    type: 'todos/set',
-    todos,
+    type: TodosTypeKeys.set,
+    payload: { todos },
   }
 }
 
-export const addTodo = (title: string) => {
+export const addTodo = (title: string): TodoAddAction => {
   const nextTodoId = Number(
     String(Date.now()) + String(Math.floor(Math.random() * Math.pow(10, 5)))
   )
   return {
-    type: 'todos/add',
-    id: nextTodoId,
-    title,
+    type: TodosTypeKeys.add,
+    payload: { id: nextTodoId, title },
   }
 }
 
-export const toggleTodo = (id: number) => ({
-  type: 'todos/toggle',
-  id,
+export const toggleTodo = (id: number): TodoToggleAction => ({
+  type: TodosTypeKeys.toggle,
+  payload: { id },
 })
 
-export const deleteTodo = (id: number) => ({
-  type: 'todos/delete',
-  id,
+export const deleteTodo = (id: number): TodoDeleteAction => ({
+  type: TodosTypeKeys.delete,
+  payload: { id },
 })
 
-export const deleteCompletedTodos = () => ({ type: 'todos/deleteCompleted' })
+export const deleteCompletedTodos = (): TodosDeleteCompletedAction => ({
+  type: TodosTypeKeys.deleteCompleted,
+})
 
-export const resetTodos = () => ({ type: 'todos/reset' })
+export const resetTodos = (): TodosStateResetAction => ({ type: TodosTypeKeys.stateReset })
 
 export const fetchTodos = (): AppThunk => async (dispatch) => {
   fetch('https://jsonplaceholder.typicode.com/todos')
@@ -84,15 +118,15 @@ export const fetchTodos = (): AppThunk => async (dispatch) => {
     })
 }
 
-export const selectAllTodosIds = (rootState: RootState) => rootState.todos.map(({ id }) => id)
+export const selectAllTodosIds = (rootState: RootState) => rootState.todos.todos.map(({ id }) => id)
 
 export const selectCompletedTodosIds = (rootState: RootState) =>
-  rootState.todos.filter(({ completed }) => completed).map(({ id }) => id)
+  rootState.todos.todos.filter(({ completed }) => completed).map(({ id }) => id)
 
 export const selectActiveTodosIds = (rootState: RootState) =>
-  rootState.todos.filter(({ completed }) => !completed).map(({ id }) => id)
+  rootState.todos.todos.filter(({ completed }) => !completed).map(({ id }) => id)
 
 export const selectTodoById = (id: number) => (rootState: RootState) =>
-  rootState.todos.find((todo) => todo.id === id)!
+  rootState.todos.todos.find((todo) => todo.id === id)!
 
 export default todosReducer
